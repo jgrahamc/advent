@@ -27,6 +27,10 @@ boring1 = np.matrix('1 2 3 4 5 6; 7 8 9 10 11 12; 13 14 15 16 17 18; 19 20 21 22
 boring2 = np.matrix('1 2 3 4 5 6; 12 11 10 9 8 7; 13 14 15 16 17 18; 24 23 22 21 20 19')
 boring3 = np.matrix('1 7 2 8 3 9; 4 10 5 11 6 12; 13 19 14 20 15 21; 16 22 17 23 18 24')
 
+# Haribo calendar
+
+haribo = np.matrix('2 15 1 13 20 18; 10 8 5 7 3 23; 4 22 14 19 6 11; 12 16 9 24 17 21')
+
 # Found by searching 1,000,000 random calendars
 
 million = np.matrix('9 4 18 10 15 20;16 21 12 1 22 7;2 6 24 5 17 13;14 8 19 11 23 3')
@@ -130,6 +134,27 @@ def generate(n):
 
     return (advent, score(advent))
 
+# swap creates a random calendar and then starts swapping pairs
+# of numbers to see if a better calendar can be found in n
+# iterations
+def swap(n):
+    advent = randcal()
+    lowscore = score(advent)
+
+    for _ in range(n):
+        i = np.random.randint(0,24)
+        j = np.random.randint(0,24)
+        attempt = np.copy(advent)
+        t = attempt[i/6,i%6]
+        attempt[i/6,i%6] = attempt[j/6,j%6]
+        attempt[j/6,j%6] = t
+        ascore = score(attempt, True)
+        if ascore < lowscore:
+            advent = np.copy(attempt)
+            lowscore = ascore
+
+    return (advent, lowscore)
+
 # search generates random calendars and finds the one with the best
 # score and returns it and its score by trying up to n times
 def search(n):
@@ -145,6 +170,10 @@ def search(n):
 
     return (bestcal, bestscore)
 
-for cal in [paul, mands, boring1, boring2, boring3, million]:
-    print(cal)
-    print(score(cal))
+#for cal in [paul, mands, boring1, boring2, boring3, million, haribo]:
+#    print(cal)
+#    print(score(cal))
+
+(acal, ascore) = swap(10000)
+print(acal)
+print(ascore)
