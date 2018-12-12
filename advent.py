@@ -144,14 +144,12 @@ def swap(n):
     for _ in range(n):
         i = np.random.randint(0,24)
         j = np.random.randint(0,24)
-        attempt = np.copy(advent)
-        t = attempt[i/6,i%6]
-        attempt[i/6,i%6] = attempt[j/6,j%6]
-        attempt[j/6,j%6] = t
-        ascore = score(attempt, True)
+        advent[i/6,i%6], advent[j/6,j%6] = advent[j/6,j%6], advent[i/6,i%6]
+        ascore = score(advent)
         if ascore < lowscore:
-            advent = np.copy(attempt)
             lowscore = ascore
+        else:
+            advent[i/6,i%6], advent[j/6,j%6] = advent[j/6,j%6], advent[i/6,i%6]
 
     return (advent, lowscore)
 
@@ -174,6 +172,6 @@ def search(n):
 #    print(cal)
 #    print(score(cal))
 
-(acal, ascore) = swap(10000)
+(acal, ascore) = swap(1000)
 print(acal)
 print(ascore)
